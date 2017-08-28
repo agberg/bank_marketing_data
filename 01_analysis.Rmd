@@ -76,6 +76,11 @@ eda
 
 ```
 
+- Over time (Macro variable, month)
+- % of Cell Phone
+- Age binned
+
+
 ### Training Data For Analysis
 
 ```{r}
@@ -214,7 +219,7 @@ prop.table(confusion_matrix_logistic$table)
 
 
 
-```{r include = FALSE}
+```{r}
 
 training_data_to_use <- training_data 
 
@@ -224,11 +229,11 @@ training_data_to_use <- training_data
 ranger_model <- ranger(term_deposit ~  . , data = training_data_to_use )
 
 
-trainctrl <- trainControl(verboseIter = TRUE, method="cv", number=10, savePredictions = TRUE, sampling = "down",
+trainctrl <- trainControl(verboseIter = TRUE, method="cv", number=3, savePredictions = TRUE, sampling = "down",
                           classProbs = TRUE)
 
 
-caret_cv <- train(term_deposit ~ ., method = 'ranger', data = training_data_to_use, trControl = trainctrl, metric = 'Kappa', tuneLength = 5, importance = 'impurity')
+caret_cv <- train(term_deposit ~ ., method = 'ranger', data = training_data_to_use, trControl = trainctrl, metric = 'Kappa', tuneLength = 1, importance = 'impurity')
 
 
 
