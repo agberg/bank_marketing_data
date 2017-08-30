@@ -233,7 +233,7 @@ trainctrl <- trainControl(verboseIter = TRUE, method="cv", number=3, savePredict
                           classProbs = TRUE)
 
 
-caret_cv <- train(term_deposit ~ ., method = 'ranger', data = training_data_to_use, trControl = trainctrl, metric = 'Kappa', tuneLength = 1, importance = 'impurity')
+caret_cv <- train(term_deposit ~ ., method = 'ranger', data = training_data_to_use, trControl = trainctrl, metric = 'Kappa', tuneLength = 5, importance = 'impurity')
 
 
 
@@ -246,6 +246,7 @@ caret_cv <- train(term_deposit ~ ., method = 'ranger', data = training_data_to_u
 
 saveRDS(ranger_model, "ranger_model.RDS")
 saveRDS(caret_cv, "caret_cv.RDS")
+
 
 # ranger_model <- readRDS("ranger_model.RDS")
 # caret_cv <- readRDS("caret_cv.RDS")
@@ -311,6 +312,9 @@ pred_all <- bind_rows("train" = training_data, "test" = testing_data, .id = "dat
     ranger_predict = predictions(predict(ranger_model, .)),
     downsample_predict = predict(caret_cv, .)
   )
+
+saveRDS(pred_all, "predictions.RDS")
+
 ```
 
 ```{r}
