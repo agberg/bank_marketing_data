@@ -47,18 +47,14 @@ These approaches are far from exhaustive.  They show, however, that analytic tec
 
 ```{r}
 
-raw_data <- read_delim("data/bank-additional/bank-additional-full.csv", ";")
+# raw_data <- read_delim("data/bank-additional/bank-additional-full.csv", ";")
+# 
+# names(raw_data) <- stringr::str_replace_all(names(raw_data), "[.]", "_")
 
-names(raw_data) <- stringr::str_replace_all(names(raw_data), "[.]", "_")
+raw_data <- readRDS("all_data.RDS")
 
 all_data <- raw_data %>%
-    rename(term_deposit = y,
-           prior_outcome = poutcome,
-           personal_loan = loan,
-           housing_loan = housing,
-           in_default = default) %>%
   mutate(job = str_replace_all(job, "[.-]", "")) %>%
-  select(-c(nr_employed, emp_var_rate, previous, pdays, campaign, duration)) %>%
   na.omit
 ```
 

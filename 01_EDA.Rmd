@@ -42,6 +42,8 @@ all_data <- raw_data %>%
            housing_loan = housing,
            in_default = default) %>%
   mutate(job = str_replace_all(job, "[.-]", "")) %>%
+  # There's something weird with campaign... there is very spotty coverage after 35 (up to 56).
+  mutate(campaign = pmin(campaign, 35)) %>%
   mutate(total_contacts = campaign + previous) %>%
   select(-c(nr_employed, emp_var_rate, previous, pdays, campaign, duration)) %>%
   na.omit
@@ -54,6 +56,9 @@ all_data <- all_data %>%
   mutate(year = case_when(year == 0 ~ 2008,
                           year == 1 ~ 2009,
                           year == 2 ~ 2010))
+
+saveRDS(all_data, "all_data.RDS")
+
 ```
 
 ## Insights
