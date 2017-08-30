@@ -49,12 +49,15 @@ all_data <- raw_data %>%
            housing_loan = housing,
            in_default = default) %>%
   mutate(job = str_replace_all(job, "[.-]", "")) %>%
+  # There's something weird with campaign... there is very spotty coverage after 35 (up to 56).
+  mutate(campaign = pmin(campaign, 35)) %>%
   mutate(total_contacts = campaign + previous) %>%
   select(-c(nr_employed, emp_var_rate, previous, pdays, campaign, duration)) %>%
   na.omit
 
 # Impute year and date
 all_data <- all_data %>%
+<<<<<<< HEAD
   mutate(month_idx = ifelse(month != lag(month, default = "may"), 1, 0)) %>%
   mutate(month_idx = cumsum(month_idx)) %>%
   mutate(year = findInterval(month_idx, c(7, 17))) %>%
@@ -62,6 +65,17 @@ all_data <- all_data %>%
                           year == 1 ~ "2009",
                           year == 2 ~ "2010")) %>%
   mutate(date = as.Date(paste0("1", month, year), "%d%b%Y"))
+=======
+  mutate(year = ifelse(month != lag(month, default = "may"), 1, 0)) %>%
+  mutate(year = cumsum(year)) %>%
+  mutate(year = findInterval(year, c(7, 17))) %>%
+  mutate(year = case_when(year == 0 ~ 2008,
+                          year == 1 ~ 2009,
+                          year == 2 ~ 2010))
+
+saveRDS(all_data, "all_data.RDS")
+
+>>>>>>> de67413e3fb44d1b86e8f48709587061299ef460
 ```
 
 ## Insights
