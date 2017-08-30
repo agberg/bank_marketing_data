@@ -57,7 +57,6 @@ all_data <- raw_data %>%
 
 # Impute year and date
 all_data <- all_data %>%
-<<<<<<< HEAD
   mutate(month_idx = ifelse(month != lag(month, default = "may"), 1, 0)) %>%
   mutate(month_idx = cumsum(month_idx)) %>%
   mutate(year = findInterval(month_idx, c(7, 17))) %>%
@@ -65,17 +64,6 @@ all_data <- all_data %>%
                           year == 1 ~ "2009",
                           year == 2 ~ "2010")) %>%
   mutate(date = as.Date(paste0("1", month, year), "%d%b%Y"))
-=======
-  mutate(year = ifelse(month != lag(month, default = "may"), 1, 0)) %>%
-  mutate(year = cumsum(year)) %>%
-  mutate(year = findInterval(year, c(7, 17))) %>%
-  mutate(year = case_when(year == 0 ~ 2008,
-                          year == 1 ~ 2009,
-                          year == 2 ~ 2010))
-
-saveRDS(all_data, "all_data.RDS")
-
->>>>>>> de67413e3fb44d1b86e8f48709587061299ef460
 ```
 
 ## Insights
