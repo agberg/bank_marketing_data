@@ -71,7 +71,7 @@ ggplot(all_data, aes(age)) +
 # checking code
 ```
 
-### Exercises
+## Exercises
 
 ```{r plot2, exercise = TRUE}
 ggplot(all_data, aes(age, color = term_deposit)) +
@@ -105,6 +105,6 @@ quiz(caption = "Use the code chunk above to help answer these questions.",
 )
 ```
 
-## Congratulations
+### Congratulations
 
 You've now met some basic dplyr verbs and ggplot2 commands.
