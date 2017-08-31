@@ -78,6 +78,14 @@ ggplot(all_data, aes(age, color = term_deposit)) +
   geom_density()
 ```
 
+<div id="help-hint">
+**Hint:** Type `ggplot(...)` and then click the blue button.
+</div>
+
+```{r plot2-check, echo = FALSE}
+# checking code
+```
+
 ## Exercises
 
 ```{r quiz1, echo = FALSE}
