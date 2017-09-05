@@ -51,37 +51,18 @@ These approaches are far from exhaustive.  They show, however, that analytic tec
 # 
 # names(raw_data) <- stringr::str_replace_all(names(raw_data), "[.]", "_")
 
-raw_data <- readRDS("all_data.RDS")
+raw_data <- readRDS("data/all_data.RDS")
 
 all_data <- raw_data %>%
   mutate(job = str_replace_all(job, "[.-]", "")) %>%
   na.omit
 ```
 
-### Exploratory Data Analysis
-
-```{r}
-
-eda <- all_data %>%
-  mutate(total = n()) %>%
-  group_by(term_deposit) %>%
-  summarize(count = n(),
-            percentage = n()/head(total, 1))
-
-eda
-
-```
-
-- Over time (Macro variable, month)
-- % of Cell Phone
-- Age binned
-
-
 ### Training Data For Analysis
 
 ```{r}
 set.seed(3456)
-trainIndex <- createDataPartition(all_data$term_deposit, p = .5, 
+trainIndex <- createDataPartition(all_data$term_deposit, p = .25, 
                                   list = FALSE, 
                                   times = 1)
 
@@ -219,9 +200,6 @@ prop.table(confusion_matrix_logistic$table)
 
 training_data_to_use <- training_data 
 
-# %>%
-#   sample_n(1000)
-
 ranger_model <- ranger(term_deposit ~  . , data = training_data_to_use )
 
 
@@ -240,8 +218,8 @@ caret_cv <- train(term_deposit ~ ., method = 'ranger', data = training_data_to_u
 
 ```{r}
 
-saveRDS(ranger_model, "ranger_model.RDS")
-saveRDS(caret_cv, "caret_cv.RDS")
+saveRDS(ranger_model, "data/ranger_model.RDS")
+saveRDS(caret_cv, "data/caret_cv.RDS")
 
 
 # ranger_model <- readRDS("ranger_model.RDS")
@@ -309,7 +287,7 @@ pred_all <- bind_rows("train" = training_data, "test" = testing_data, .id = "dat
     downsample_predict = predict(caret_cv, .)
   )
 
-saveRDS(pred_all, "predictions.RDS")
+saveRDS(pred_all, "data/predictions.RDS")
 
 ```
 
@@ -339,15 +317,6 @@ summary_pred_all <- pred_all %>%
 
 
 summary_pred_all
-
-
-```
-How do I add the expected value per category?
-
-```{r}
-
-
-
 
 
 ```
