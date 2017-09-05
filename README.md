@@ -8,27 +8,13 @@ We are working with a dataset from a Portuguese bank.  The data categorizes dire
 
 - Build a few two-stage logistical regression model: propensity to answer, followed by likliehood to purchase a term loan given that the person answers.
 
-- Build a random forest model
+- Build a random forest model and a tuned random forest model (using downsampling to optimize for an unbalanced sample)
 
-- Test the models against each other and pick the best model
+## Dashboard
 
-- Build a tool to model the distribution of expected purchase outcomes given different target parameters and given a choice of model
-
-- Establish cutoffs for "worth it" (% of called who purchase) and identify which groups are worth targeting given these cutoffs *and* given a minimum sample size (i.e. you can reach out to lower answering groups with higher yield percentages if the sample size is large enough to justify)
-
-## Application
-
-- Build an application that proposes lists of customers to call given cutoffs from the first area, plus inputs related to exogenous factors (CPI, Euribor, etc.)
+This is a simple decision tool that allows you to decide whether to use the tuned RF model to screen potential marketing candidates or just target the whole population based on demographics and the cost/benefit of making calls vs. capturing sales.  This is instrumented very simply right now - we use the test population and re-sample from it to try to capture true relationships between variables.  Given the relatively short time-frame, if relationships between variables changed in ways that were not captured in this dataset, the predictive ability of the model and the utility of the decision-making tool would of course be de-graded.
 
 ## LearnR
 
-- Overview of project
-- Literature Review
-- Justification of Methodology
-    - Logistic Regression
-    - Random Forest
-    - Which works better?
-- Implementation in R
-- Similar projects
-
+We can add to this / adapt as required.  Right now it's a simple "Intro to Tidyverse" demo that uses the bank marketing data.
 
