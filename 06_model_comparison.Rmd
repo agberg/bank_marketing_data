@@ -52,9 +52,7 @@ library(ranger)
 
 ```{r data}
 raw_data <- readRDS("data/all_data.RDS")
-```
 
-```{r tidy}
 all_data <- raw_data %>%
   mutate(job = str_replace_all(job, "[.-]", "")) %>%
   na.omit %>%
@@ -68,16 +66,17 @@ all_data <- raw_data %>%
          contact, month, day_of_week, prior_outcome, term_deposit),
     funs(as_factor(.))) %>%
   mutate(term_deposit = fct_relevel(term_deposit, "yes", "no"))
-```
 
-```{r traintest}
 set.seed(params$seed)
+
 trainIndex <- createDataPartition(all_data$term_deposit, p = params$training_size, list = FALSE)
+
 training_data <- slice(all_data, trainIndex)
+
 testing_data <- slice(all_data, -trainIndex)
 ```
 
-# Model {.tabset}
+# Models {.tabset}
 
 ## Logistic Regression
 
@@ -85,13 +84,14 @@ Cutoff set at `r params$cutoff`.
 
 ```{r logfit}
 log_model <- glm(term_deposit ~ ., binomial, training_data)
-```
 
-```{r logpred}
 log_pred <- testing_data %>%
   mutate(p = predict(log_model, ., type = "response"),
          predicted = as.factor(ifelse(p <= params$cutoff, "yes", "no"))) %>%
   select(term_deposit, predicted)
+```
+
+```{r logpred}
 confusionMatrix(log_pred$predicted, log_pred$term_deposit)
 ```
 
@@ -101,12 +101,13 @@ Number of trees set at `r params$num_trees`.
 
 ```{r rangerfit}
 ranger_model <- ranger(term_deposit ~  . , data = training_data, num.trees = params$num_trees)
-```
 
-```{r rangerpred}
 ranger_pred <- testing_data %>%
   mutate(predicted = predict(ranger_model, ., type = "response")$predictions) %>%
   select(term_deposit, predicted)
+```
+
+```{r rangerpred}
 confusionMatrix(ranger_pred$predicted, ranger_pred$term_deposit)
 ```
 
@@ -127,12 +128,16 @@ caret_model <- train(term_deposit ~ .,
                   data = training_data, 
                   trControl = trainctrl, 
                   metric = params$metric, 
-                  tuneLength = 5)
-```
+                  tuneLength = 5,
+                  importance = 'impurity')
 
-```{r, caretpred}
 caret_pred <- testing_data %>%
   mutate(predicted = predict(caret_model, .)) %>%
   select(term_deposit, predicted)
+```
+
+```{r caretpred}
 confusionMatrix(caret_pred$predicted, caret_pred$term_deposit)
 ```
+
+
