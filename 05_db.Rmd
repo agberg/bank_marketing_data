@@ -1,9 +1,10 @@
 ---
-title: "R Notebook"
+title: "3 Ways to Query Data"
 output: html_notebook
 ---
 
 You can query databases in with three methods:
+
 * Pass through queries to DBI
 * dplyr translation
 * SQL code engines in R Markdown
@@ -93,7 +94,7 @@ collect(bank_agg_tbl) %>%
 
 Query your database with pass through SQL in R Markdown. If you want to output the query to file use `output.var = "bank_agg_tbl2"`.
 
-```{sql, connection=con}
+```{sql, connection=con, output.var = "bank_agg_tbl2"}
 select month_idx, year, month,
 sum(case when term_deposit = 'yes' then 1.0 else 0.0 end) as subscribe,
 count(*) as total
